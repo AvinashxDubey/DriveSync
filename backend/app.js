@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const logRoutes = require('./routes/logRoutes');
 const updatePackageRoutes = require('./routes/updatePackageRoutes');
 const vehicleRoutes = require('./routes/vehicleRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 require('dotenv').config();
 connectDb();
@@ -27,6 +28,7 @@ app.use(cors({
 }));
 
 app.use('/api', authRoutes);
+app.use('/api', contactRoutes);
 app.use('/api/log', logRoutes);
 app.use('/api/update', updatePackageRoutes);
 app.use('/api/vehicle', vehicleRoutes);
