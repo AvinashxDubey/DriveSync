@@ -12,6 +12,15 @@ const logUpdateStatus = async (req, res) => {
       return res.status(404).json({ message: 'Vehicle not found.' });
     }
 
+    if(!vehicle.assignedUpdate) {
+      return res.status(400).json({ message: 'No update assigned to this vehicle.' });
+    }
+
+    // If update is already marked complete, reject further logs
+    if (!vehicle.updateInProgress) {
+      return res.status(400).json({ message: 'Update already completed for this vehicle.' });
+    }
+
     const log = new UpdateLog({
       vehicle: vehicle._id,
       status,
@@ -20,6 +29,13 @@ const logUpdateStatus = async (req, res) => {
     });
 
     await log.save();
+
+    // If update completed, mark updateInProgress as false
+    if (progress === 100 && status.toLowerCase() === 'completed') {
+      vehicle.updateInProgress = false;
+      await vehicle.save();
+    }
+
     res.status(201).json({ message: 'Log saved', log });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });

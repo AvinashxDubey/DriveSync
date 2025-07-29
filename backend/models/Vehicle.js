@@ -13,6 +13,10 @@ const vehicleSchema = new mongoose.Schema({
     assignedUpdate: {
         type: mongoose.Schema.Types.ObjectId, ref: 'UpdatePackage'
     },
+    updateInProgress: {
+        type: Boolean,
+        default: true,
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

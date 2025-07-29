@@ -19,11 +19,7 @@ const updateLogSchema = new mongoose.Schema({
     type: Number, // 0 to 100
     min: 0,
     max: 100,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model('UpdateLog', updateLogSchema);

@@ -3,7 +3,7 @@ const router = express.Router();
 const verifyToken = require('../middleware/authMiddleware');
 const { logUpdateStatus, getLogsByVehicle} = require('../controllers/logController');
 
-router.post('/status', verifyToken, logUpdateStatus);
-router.get('/logs/:vehicleId', verifyToken, getLogsByVehicle);
+router.post('/status/:vin', verifyToken, logUpdateStatus);
+router.get('/logs/:vin', verifyToken, getLogsByVehicle);
 
 module.exports = router;

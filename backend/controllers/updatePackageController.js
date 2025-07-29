@@ -36,10 +36,10 @@ const getAllUpdates = async (req, res) => {
 // Assign an update to a vehicle
 const assignUpdateToVehicle = async (req, res) => {
   try {
-    const { vin } = req.params;
+    const id = req.params.id; // Vehicle ID from the URL
     const { updateId } = req.body;
 
-    const vehicle = await Vehicle.findOne({ vin });
+    const vehicle = await Vehicle.findById(id);
     const update = await UpdatePackage.findById(updateId);
 
     if (!vehicle || !update) {
@@ -49,7 +49,7 @@ const assignUpdateToVehicle = async (req, res) => {
     vehicle.assignedUpdate = update._id;
     await vehicle.save();
 
-    res.json({ message: `Update ${update.version} assigned to vehicle ${vin}` });
+    res.json({ message: `Update ${update.version} assigned to vehicle with VIN ${vehicle.vin}` });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }

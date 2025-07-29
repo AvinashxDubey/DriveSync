@@ -23,7 +23,7 @@ const registerVehicle = async (req, res) => {
   }
 };
 
-// Get all registered vehicles
+// Get all vehicles registered by user
 const getAllVehicles = async (req, res) => {
   try {
     const vehicles = await Vehicle.find({owner: req.user.id}).populate('assignedUpdate');
@@ -56,7 +56,7 @@ const updateVehicle = async (req, res) => {
     const updates = req.body;
 
     const updatedVehicle = await Vehicle.findOneAndUpdate(
-      { vin, owner: req.user.id },
+      { owner: req.user.id },
       { $set: updates },
       { new: true }
     );
