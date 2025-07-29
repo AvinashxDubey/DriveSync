@@ -1,0 +1,62 @@
+const UpdatePackage = require('../models/UpdatePackage');
+const Vehicle = require('../models/Vehicle');
+
+// Create a new update package
+const createUpdatePackage = async (req, res) => {
+  try {
+    const { version, description, files } = req.body;
+
+    if (!version || !files) {
+      return res.status(400).json({ message: 'Version and files are required.' });
+    }
+
+    const existing = await UpdatePackage.findOne({ version });
+    if (existing) {
+      return res.status(409).json({ message: 'Update with this version already exists.' });
+    }
+
+    const update = new UpdatePackage({ version, description, files });
+    await update.save();
+    res.status(201).json(update);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// Get all update packages
+const getAllUpdates = async (req, res) => {
+  try {
+    const updates = await UpdatePackage.find();
+    res.json(updates);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// Assign an update to a vehicle
+const assignUpdateToVehicle = async (req, res) => {
+  try {
+    const { vin } = req.params;
+    const { updateId } = req.body;
+
+    const vehicle = await Vehicle.findOne({ vin });
+    const update = await UpdatePackage.findById(updateId);
+
+    if (!vehicle || !update) {
+      return res.status(404).json({ message: 'Vehicle or update not found.' });
+    }
+
+    vehicle.assignedUpdate = update._id;
+    await vehicle.save();
+
+    res.json({ message: `Update ${update.version} assigned to vehicle ${vin}` });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+module.exports = {
+  createUpdatePackage,
+  getAllUpdates,
+  assignUpdateToVehicle
+};
