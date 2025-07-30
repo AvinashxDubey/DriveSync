@@ -5,6 +5,6 @@ const { createUpdatePackage, getAllUpdates, assignUpdateToVehicle } = require('.
 
 router.post('/addPackage', verifyToken, createUpdatePackage);
 router.get('/updates', verifyToken, getAllUpdates);
-router.post('/vehicle/:id', verifyToken, assignUpdateToVehicle);
+router.post('/vehicle/:id', verifyToken, isAdmin, assignUpdateToVehicle);
 
 module.exports = router;

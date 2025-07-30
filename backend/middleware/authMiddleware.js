@@ -18,4 +18,11 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+const isAdmin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: "Forbidden: Admin access only" });
+  }
+  next();
+};
+
+module.exports = { verifyToken, isAdmin };
