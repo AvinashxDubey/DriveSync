@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const user = require('../models/User.js');
 require('dotenv').config();
 
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+const generateToken = (user) => {
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: '3d',
   });
 }; 
@@ -23,7 +23,7 @@ const register = async (req, res) => {
     const newUser = new user({ name, email, password: hashedPassword });
     await newUser.save();
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(newUser);
     res.status(201).json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -45,11 +45,25 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = generateToken(existingUser._id);
+    const token = generateToken(existingUser);
     res.status(200).json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = { register, login };
+const getProfile = async (req, res) => {
+  try {
+    if (!req.user.id) return res.status(400).json({ message: 'Invalid user ID in token' });
+
+    const foundUser = await user.findById(req.user.id).select('-password');
+    if (!foundUser) return res.status(404).json({ message: 'User not found' });
+
+    res.json(foundUser);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+}
+
+
+module.exports = { register, login, getProfile };

@@ -59,7 +59,23 @@ const getLogsByVehicle = async (req, res) => {
   }
 };
 
+const getUserUpdateLogCount = async (req, res) => {
+  try {
+    // Get all vehicle IDs owned by the user
+    const vehicles = await Vehicle.find({ owner: req.user.id }).select('_id');
+    const vehicleIds = vehicles.map(v => v._id);
+
+    // Count update logs for those vehicle IDs
+    const count = await UpdateLog.countDocuments({ vehicle: { $in: vehicleIds } });
+
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
 module.exports = {
   logUpdateStatus,
   getLogsByVehicle,
+  getUserUpdateLogCount
 };

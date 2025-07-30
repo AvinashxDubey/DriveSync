@@ -15,7 +15,7 @@ const createUpdatePackage = async (req, res) => {
       return res.status(409).json({ message: 'Update with this version already exists.' });
     }
 
-    const update = new UpdatePackage({ version, description, files });
+    const update = new UpdatePackage({ version, description, files, createdBy: req.user.id });
     await update.save();
     res.status(201).json(update);
   } catch (err) {
@@ -55,8 +55,37 @@ const assignUpdateToVehicle = async (req, res) => {
   }
 };
 
+const getUserAssignedUpdateCount = async (req, res) => {
+  try {
+    const vehicles = await Vehicle.find({ owner: req.user.id }).select('assignedUpdate');
+
+    const assignedUpdateIds = vehicles
+      .map(vehicle => vehicle.assignedUpdate)
+      .filter(Boolean);
+
+    const uniqueUpdateIds = [...new Set(assignedUpdateIds.map(id => id.toString()))];
+
+    res.json({ count: uniqueUpdateIds.length });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+
+const getAdminCreatedUpdateCount = async (req, res) => {
+  try {
+    const count = await UpdatePackage.countDocuments({ createdBy: req.user.id });
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+
 module.exports = {
   createUpdatePackage,
   getAllUpdates,
-  assignUpdateToVehicle
+  assignUpdateToVehicle,
+  getUserAssignedUpdateCount,
+  getAdminCreatedUpdateCount
 };

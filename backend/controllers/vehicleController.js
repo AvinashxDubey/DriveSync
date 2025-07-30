@@ -87,10 +87,21 @@ const deleteVehicle = async (req, res) => {
   }
 };
 
+const getUserVehicleCount = async (req, res) => {
+  try {
+    const count = await Vehicle.countDocuments({ owner: req.user.id });
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+
 module.exports = {
   registerVehicle,
   getAllVehicles,
   getVehicleByVin,
   updateVehicle,
   deleteVehicle,
+  getUserVehicleCount
 };
