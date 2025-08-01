@@ -1,0 +1,108 @@
+/* Container wrapper to align the main content nicely */
+.wrapper {
+  min-height: 100vh;
+  background: #f0f8ff; /* Soft light blue background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  color: #1e293b; /* Dark slate gray */
+}
+
+.content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* The card that holds the form, with subtle corner shading */
+.card.registerVehicleCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 8px rgba(135, 206, 235, 0.3), /* sky blue shadow */
+    inset 0 0 15px rgba(135, 206, 235, 0.2); /* inner corner shading */
+  padding: 2rem 2.5rem;
+  color: #0a2540;
+  transition: box-shadow 0.3s ease;
+}
+
+.card.registerVehicleCard:hover {
+  box-shadow:
+    0 6px 12px rgba(135, 206, 235, 0.5),
+    inset 0 0 20px rgba(135, 206, 235, 0.3);
+}
+
+.registerVehicleCard h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+/* Form styling */
+.registerForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 1.2rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+.formGroup input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 2px solid #cbd5e0;
+  background-color: #f9fbfd;
+  color: #1e293b;          /* <-- Add this line */
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.formGroup input:focus {
+  border-color: #60a5fa; /* Bright sky blue */
+  outline: none;
+  background-color: #fff;
+}
+
+/* Submit button */
+.submitButton {
+  background-color: #3b82f6; /* bright sky blue */
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+/* Success message styling */
+.successMessage {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Error message can use your shared ErrorMessage component or add here */
+

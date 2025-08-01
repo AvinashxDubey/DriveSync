@@ -1,0 +1,27 @@
+.progressBar {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  background: #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 6px 0 0 0;
+}
+
+.progress {
+  background: linear-gradient(90deg, #68d1ba 0%, #489f74 100%);
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.4s cubic-bezier(.4,2.2,.6,1);
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.89em;
+  font-weight: 500;
+  color: #2c3241;
+  line-height: 18px;
+}

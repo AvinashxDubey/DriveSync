@@ -1,0 +1,55 @@
+.assignUpdateForm {
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  color: #2d3748;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: #4a5568;
+}
+
+.formGroup select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2d3748;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  background: #fafafa url("data:image/svg+xml;utf8,<svg fill='%236a7280' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 0.75rem center / 1rem auto;
+}
+
+.formGroup select:focus {
+  border-color: #3182ce;
+  outline: none;
+  background-color: #fff;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #2a4365;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #2c5282;
+}

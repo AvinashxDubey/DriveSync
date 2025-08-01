@@ -17,7 +17,7 @@ import {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth(); // ⬅️ use logout from context
 
   const [vehicleCount, setVehicleCount] = useState(0);
   const [updateCount, setUpdateCount] = useState(0);
@@ -35,9 +35,18 @@ const Dashboard = () => {
     navigate(path);
   };
 
+  const handleLogout = () => {
+    logout(); // remove token and user from context
+    navigate('/login');
+  };
+
   return (
     <div className="dashboard">
-      <h2>{user?.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}</h2>
+      {/* 🔒 Logout button on top-right */}
+      <div className="dashboard-header">
+        <h2>{user?.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}</h2>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      </div>
 
       <div className="dashboard-cards">
         {user?.role !== 'admin' && (

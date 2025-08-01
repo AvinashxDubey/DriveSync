@@ -1,0 +1,63 @@
+.recent-logs-wrapper {
+  padding: 2rem;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+.recent-logs-content {
+  max-width: 850px;
+  margin: 0 auto;
+}
+.logs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(265px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2.5rem;
+}
+.log-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(30,40,80,0.09);
+  padding: 1.4rem 1.1rem 1.1rem;
+  transition: box-shadow 0.2s;
+}
+.log-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.13rem;
+  font-weight: 600;
+}
+.log-card .vin {
+  font-size: 0.98em;
+  color: #447189;
+  font-weight: 400;
+}
+.no-logs {
+  color: #999;
+  font-style: italic;
+}
+.log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.log-list li {
+  padding: 0.5em 0 0.7em 0;
+  border-bottom: 1px solid #eef0f2;
+  font-size: 0.98em;
+}
+.log-list li:last-child {
+  border-bottom: none;
+}
+.log-date {
+  color: #2b88d2;
+  font-size: 0.97em;
+  margin-right: 0.6em;
+}
+@media (max-width: 600px) {
+  .logs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+  .recent-logs-wrapper {
+    padding: 1rem 0.5rem 2rem 0.5rem;
+  }
+}

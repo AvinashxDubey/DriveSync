@@ -1,0 +1,39 @@
+.vehicles-wrapper {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.vehicles-content {
+  max-width: 1000px; /* Increased from 850px to allow wider cards */
+  margin: 0 auto;
+}
+
+.vehicles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Wider cards */
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.vehicle-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(60, 60, 80, 0.08);
+  padding: 1.5rem 1.2rem;
+  transition: box-shadow 0.2s;
+}
+
+.vehicle-card:hover {
+  box-shadow: 0 4px 16px rgba(60, 60, 100, 0.16);
+}
+
+.status.in-progress {
+  color: #ee611e;
+  font-weight: 600;
+}
+
+.status.idle {
+  color: #007170;
+  font-weight: 600;
+}

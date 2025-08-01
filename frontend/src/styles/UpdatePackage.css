@@ -1,0 +1,111 @@
+.wrapper {
+  padding: 2rem;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.content {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.vehicleCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2.5rem;
+}
+
+.vehicleCard {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(30,40,80,0.09);
+  padding: 1.5rem 1.3rem 1.1rem;
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.vehicleCard:hover {
+  box-shadow: 0 6px 24px rgba(30,60,110,0.14);
+}
+
+.vehicleCard h3 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.vehicleCard .vin {
+  font-size: 0.98em;
+  color: #447189;
+  font-weight: 400;
+}
+
+.formGroup {
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-size: 0.98rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #43515c;
+}
+
+.formGroup select {
+  padding: 0.52rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 7px;
+  border: 1px solid #cdd5dd;
+  background: #f6f6fa;
+  outline: none;
+  color: #223241;
+  transition: border-color 0.18s;
+}
+
+.formGroup select:focus {
+  border-color: #2b89d6;
+}
+
+.assignButton {
+  padding: 0.55rem 1.2rem;
+  background: #2462b9;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(60,80,150,0.05);
+}
+
+.assignButton:disabled {
+  background: #b3c5e0;
+  cursor: not-allowed;
+}
+
+.successMessage {
+  background: #e7fbed;
+  color: #20622e;
+  padding: 0.85rem 1rem;
+  border-radius: 7px;
+  margin-bottom: 1.3rem;
+  font-weight: 500;
+  border-left: 5px solid #13c25c;
+}
+
+@media (max-width: 600px) {
+  .vehicleCardsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+  .wrapper {
+    padding: 1rem 0.5rem 2rem 0.5rem;
+  }
+}

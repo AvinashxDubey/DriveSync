@@ -1,0 +1,114 @@
+/* VehicleDetails.css */
+
+.wrapper {
+  min-height: 100vh;
+  background: #f0f8ff; /* light sky blue background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1e293b; /* dark slate gray */
+  padding: 20px;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Vehicle info card */
+.vehicleCard {
+  background-color: #87ceeb; /* sky blue */
+  color: #0a2540;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgb(135 206 235 / 0.3);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.vehicleCard h2 {
+  margin: 0 0 0.6rem 0;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.vehicleCard p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Existing card styling for update logs and status */
+.card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 12px rgba(40, 72, 138, 0.12);
+  padding: 2rem 2.5rem;
+  color: #1e293b;
+}
+
+.logHeader {
+  margin-top: 2rem;
+  font-size: 1rem;
+  color: #64748b; /* medium slate gray */
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.6rem 0;
+  font-size: 1rem;
+}
+
+.logItem:last-child {
+  border-bottom: none;
+}
+
+.status {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-right: 15px;
+  color: #0c4a6e; /* dark sky blue */
+}
+
+.progress {
+  color: #2563eb; /* blue */
+  background: #dbeafe; /* light blue background */
+  border-radius: 10px;
+  padding: 0 10px;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.logTime {
+  font-size: 0.9em;
+  color: #64748b;
+  font-family: monospace;
+  margin-left: 15px;
+}
+.assignButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #0ea5e9; /* sky blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.assignButton:hover {
+  background-color: #0284c7; /* darker blue */
+}
+
