@@ -10,7 +10,7 @@ import Home from './pages/Home';
 import RecentLogs from './components/RecentLogs';
 
 // Authentication check
-const isAuthenticated = () => !!localStorage.getItem("token");
+const isAuthenticated = () => localStorage.getItem("token");
 
 // PrivateRoute wrapper
 const PrivateRoute = ({ children }) => {
@@ -21,18 +21,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Only publicly accessible route */}
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
 
-        {/* All routes below require login */}
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -82,8 +75,8 @@ const App = () => {
           }
         />
 
-        {/* Redirect unknown paths to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* Redirect unknown routes to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

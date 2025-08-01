@@ -3,14 +3,14 @@ import {
   getAllVehicles,
   getAllUpdatePackages,
   assignUpdateToVehicle,
-} from '../services/api';
+} from '../services/api'; // adjust the path if needed
 import '../styles/UpdatePackage.css';
 
 function UpdatePackage() {
   const [vehicles, setVehicles] = useState([]);
   const [updates, setUpdates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [assigningFor, setAssigningFor] = useState(null);
+  const [assigning, setAssigning] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -20,7 +20,7 @@ function UpdatePackage() {
         const vehicleRes = await getAllVehicles();
         const updateRes = await getAllUpdatePackages();
 
-        setVehicles(vehicleRes.data || vehicleRes);
+        setVehicles(vehicleRes.data || vehicleRes); // adapt if your backend sends {data: []}
         setUpdates(updateRes.data || updateRes);
       } catch (err) {
         console.error(err);
@@ -39,32 +39,26 @@ function UpdatePackage() {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
-    setAssigningFor(vehicleId);
+    setAssigning(true);
 
-    const updateToAssign = updates[0];
-
-    if (!updateToAssign) {
-      setErrorMsg('No updates available to assign.');
-      setAssigningFor(null);
-      return;
-    }
+    const updateId = e.target.elements[`update-${vehicleId}`].value;
 
     try {
-      const res = await assignUpdateToVehicle(vehicleId, { updateId: updateToAssign._id });
-      setSuccessMsg(res.message || `Update assigned to ${vehicleId} successfully.`);
+      const res = await assignUpdateToVehicle(vehicleId, { updateId });
+      setSuccessMsg(res.message || 'Update assigned successfully.');
     } catch (err) {
       setErrorMsg(
-        err?.response?.data?.message || `Failed to assign update to ${vehicleId}.`
+        err?.response?.data?.message || 'Failed to assign update to vehicle.'
       );
     } finally {
-      setAssigningFor(null);
+      setAssigning(false);
     }
   };
 
   return (
     <div className="wrapper">
       <main className="content">
-        <h2>Assign Latest Update to Vehicles</h2>
+        <h2>Assign Updates to Your Vehicles</h2>
 
         {loading && <p>Loading...</p>}
         {errorMsg && <div className="errorMessage">{errorMsg}</div>}
@@ -80,17 +74,32 @@ function UpdatePackage() {
               </h3>
 
               <form onSubmit={(e) => handleAssign(e, vehicle._id)}>
-                {updates.length === 0 ? (
-                  <p className="errorMessage">No updates available.</p>
-                ) : (
-                  <button
-                    className="assignButton"
-                    type="submit"
-                    disabled={assigningFor === vehicle._id}
+                <div className="formGroup">
+                  <label htmlFor={`update-${vehicle._id}`}>Choose Update</label>
+                  <select
+                    id={`update-${vehicle._id}`}
+                    name={`update-${vehicle._id}`}
+                    required
+                    disabled={assigning}
+                    defaultValue=""
                   >
-                    {assigningFor === vehicle._id ? 'Assigning...' : 'Assign Latest Update'}
-                  </button>
-                )}
+                    <option value="" disabled>
+                      -- Select Update --
+                    </option>
+                    {updates.map(update => (
+                      <option key={update._id} value={update._id}>
+                        {update.version}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  className="assignButton"
+                  type="submit"
+                  disabled={assigning}
+                >
+                  {assigning ? 'Assigning...' : 'Assign Update'}
+                </button>
               </form>
             </div>
           ))}
