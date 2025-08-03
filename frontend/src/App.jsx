@@ -8,6 +8,7 @@ import AssignUpdate from './pages/AssignUpdate';
 import RegisterVehicles from './pages/RegisterVehicles';
 import Home from './pages/Home';
 import RecentLogs from './components/RecentLogs';
+import Register from './pages/Register';
 
 // Authentication check
 const isAuthenticated = () => localStorage.getItem("token");
@@ -24,7 +25,7 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-
+        <Route path="/register" element={<Register />} />
         {/* Protected Routes */}
         <Route
           path="/dashboard"
