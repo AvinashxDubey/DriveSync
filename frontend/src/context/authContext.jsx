@@ -10,7 +10,11 @@ export const AuthProvider = ({ children }) => {
   const fetchProfile = async (token) => {
     try {
       const res = await getProfile(token);
-      setUser(res.data);
+      setUser({
+        name: res.data.name,
+        email: res.data.email,
+        role: res.data.role,
+      });
     } catch (err) {
       console.error('Failed to fetch profile:', err);
       setUser(null);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import AssignUpdateForm from '../components/AssignUpdateForm';
 import ErrorMessage from '../components/ErrorMessage';
@@ -52,11 +52,7 @@ function AssignUpdate() {
   }, []);
 
   const onAssignUpdate = async (vehicleId, updateId) => {
-    try {
-      await assignUpdateToVehicle(vehicleId, { updateId });
-    } catch (err) {
-      throw err;
-    }
+    await assignUpdateToVehicle(vehicleId, { updateId });
   };
 
   return (
