@@ -15,7 +15,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     updateInProgress: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,

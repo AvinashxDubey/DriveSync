@@ -6,10 +6,12 @@ const { registerVehicle,
     getVehicleByVin,
     updateVehicle,
     deleteVehicle,
-    getUserVehicleCount } = require('../controllers/vehicleController');
+    getUserVehicleCount, 
+    getAllVehiclesByUser} = require('../controllers/vehicleController');
 
 router.post('/register', verifyToken, registerVehicle);
 router.get('/vehicles', verifyToken, getAllVehicles);
+router.get('/vehicles-user', verifyToken, getAllVehiclesByUser);
 router.get('/getVehicle/:vin', verifyToken, getVehicleByVin);
 router.put('/update/:vin', verifyToken, updateVehicle);
 router.delete('/delete/:vin', verifyToken, deleteVehicle);
