@@ -8,7 +8,7 @@ const updateLogSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['initiated', 'in-progress', 'completed', 'failed'],
+    default: 'pending',
     required: true,
   },
   message: {

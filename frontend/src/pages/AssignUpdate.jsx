@@ -10,7 +10,6 @@ export default function AssignUpdate() {
   const [updates, setUpdates] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState('');
   const [selectedUpdateId, setSelectedUpdateId] = useState('');
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     // Fetch registered vehicles for the logged-in user

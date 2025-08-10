@@ -23,8 +23,18 @@ const registerVehicle = async (req, res) => {
   }
 };
 
-// Get all vehicles registered by user
-const getAllVehicles = async (req, res) => {
+//get all the vehicles
+const getAllVehicles = async(req, res) => {
+  try{
+    const vehicles = await Vehicle.find().populate('assignedUpdate');
+    res.json(vehicles);
+  } catch(err){
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}
+
+// Get all vehicles registered by a particular user
+const getAllVehiclesByUser = async (req, res) => {
   try {
     const vehicles = await Vehicle.find({owner: req.user.id}).populate('assignedUpdate');
     res.json(vehicles);
@@ -100,6 +110,7 @@ const getUserVehicleCount = async (req, res) => {
 module.exports = {
   registerVehicle,
   getAllVehicles,
+  getAllVehiclesByUser,
   getVehicleByVin,
   updateVehicle,
   deleteVehicle,

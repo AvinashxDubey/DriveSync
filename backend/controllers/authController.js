@@ -54,12 +54,7 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    if (!req.user.id) return res.status(400).json({ message: 'Invalid user ID in token' });
-
-    const foundUser = await user.findById(req.user.id).select('-password');
-    if (!foundUser) return res.status(404).json({ message: 'User not found' });
-
-    res.json(foundUser);
+    res.json(req.user);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
