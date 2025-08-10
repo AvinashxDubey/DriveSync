@@ -1,112 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import {
-  getAllVehicles,
-  getAllUpdatePackages,
-  assignUpdateToVehicle,
-} from '../services/api'; // adjust the path if needed
+import React, { useState } from 'react';
+import axios from 'axios';
 import '../styles/UpdatePackage.css';
 
-function UpdatePackage() {
-  const [vehicles, setVehicles] = useState([]);
-  const [updates, setUpdates] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [assigning, setAssigning] = useState(false);
+function CreateUpdatePackage() {
+  const [version, setVersion] = useState('');
+  const [description, setDescription] = useState('');
+  const [files, setFiles] = useState(''); // Comma-separated URLs
+  const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const vehicleRes = await getAllVehicles();
-        const updateRes = await getAllUpdatePackages();
-
-        setVehicles(vehicleRes.data || vehicleRes); // adapt if your backend sends {data: []}
-        setUpdates(updateRes.data || updateRes);
-      } catch (err) {
-        console.error(err);
-        setErrorMsg(
-          err?.response?.data?.message || 'Failed to load vehicles or updates.'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleAssign = async (e, vehicleId) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setErrorMsg('');
     setSuccessMsg('');
-    setAssigning(true);
-
-    const updateId = e.target.elements[`update-${vehicleId}`].value;
 
     try {
-      const res = await assignUpdateToVehicle(vehicleId, { updateId });
-      setSuccessMsg(res.message || 'Update assigned successfully.');
-    } catch (err) {
-      setErrorMsg(
-        err?.response?.data?.message || 'Failed to assign update to vehicle.'
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setErrorMsg('You must be logged in as an admin to create an update package.');
+        setLoading(false);
+        return;
+      }
+
+      // Convert comma-separated string to array
+      const filesArray = files
+        .split(',')
+        .map(f => f.trim())
+        .filter(f => f);
+
+      const res = await axios.post(
+        '/api/updates/addPackage',
+        {
+          version,
+          description,
+          files: filesArray
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
+
+      setSuccessMsg(res.data?.message || 'Update package created successfully!');
+      setVersion('');
+      setDescription('');
+      setFiles('');
+    } catch (err) {
+      // Differentiate between admin restriction and other errors
+      if (err?.response?.status === 403) {
+        setErrorMsg('Only admins can create update packages.');
+      } else if (err?.response?.status === 401) {
+        setErrorMsg('Unauthorized: Please log in again.');
+      } else {
+        setErrorMsg(err?.response?.data?.message || 'Failed to create update package.');
+      }
     } finally {
-      setAssigning(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="wrapper">
       <main className="content">
-        <h2>Assign Updates to Your Vehicles</h2>
+        <h2>Create Update Package (Admin Only)</h2>
 
-        {loading && <p>Loading...</p>}
         {errorMsg && <div className="errorMessage">{errorMsg}</div>}
         {successMsg && <div className="successMessage">{successMsg}</div>}
 
-        <div className="vehicleCardsGrid">
-          {!loading && vehicles.length === 0 && <p>No vehicles found.</p>}
+        <form onSubmit={handleSubmit} className="updateForm">
+          <div className="formGroup">
+            <label>Version</label>
+            <input
+              type="text"
+              value={version}
+              onChange={(e) => setVersion(e.target.value)}
+              placeholder="Enter update version (e.g., v1.0.2)"
+              required
+            />
+          </div>
 
-          {vehicles.map(vehicle => (
-            <div className="vehicleCard" key={vehicle._id}>
-              <h3>
-                {vehicle.model} <span className="vin">({vehicle.vin})</span>
-              </h3>
+          <div className="formGroup">
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter description of the update"
+            />
+          </div>
 
-              <form onSubmit={(e) => handleAssign(e, vehicle._id)}>
-                <div className="formGroup">
-                  <label htmlFor={`update-${vehicle._id}`}>Choose Update</label>
-                  <select
-                    id={`update-${vehicle._id}`}
-                    name={`update-${vehicle._id}`}
-                    required
-                    disabled={assigning}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      -- Select Update --
-                    </option>
-                    {updates.map(update => (
-                      <option key={update._id} value={update._id}>
-                        {update.version}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button
-                  className="assignButton"
-                  type="submit"
-                  disabled={assigning}
-                >
-                  {assigning ? 'Assigning...' : 'Assign Update'}
-                </button>
-              </form>
-            </div>
-          ))}
-        </div>
+          <div className="formGroup">
+            <label>Files (comma-separated URLs)</label>
+            <input
+              type="text"
+              value={files}
+              onChange={(e) => setFiles(e.target.value)}
+              placeholder="https://example.com/file1.zip, https://example.com/file2.zip"
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading}>
+            {loading ? 'Creating...' : 'Create Update'}
+          </button>
+        </form>
       </main>
     </div>
   );
 }
 
-export default UpdatePackage;
+export default CreateUpdatePackage;

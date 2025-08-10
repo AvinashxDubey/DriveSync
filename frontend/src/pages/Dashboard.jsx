@@ -63,11 +63,7 @@ const Dashboard = () => {
               <p>New</p>
             </div>
 
-            <div className="card" onClick={() => handleNavigation('/updates')}>
-              <FaSyncAlt className="icon" />
-              <h3>Update Packages</h3>
-              <p>{updateCount}</p>
-            </div>
+           
 
             <div className="card" onClick={() => handleNavigation('/logs')}>
               <FaFileAlt className="icon" />
@@ -78,12 +74,21 @@ const Dashboard = () => {
         )}
 
         {user?.role === 'admin' && (
-          <div className="card" onClick={() => handleNavigation('/assign-update')}>
-            <FaClipboardCheck className="icon" />
-            <h3>Assign Updates</h3>
-            <p>To Vehicles</p>
-          </div>
-        )}
+  <>
+    <div className="card" onClick={() => handleNavigation('/assign-update')}>
+      <FaClipboardCheck className="icon" />
+      <h3>Assign Updates</h3>
+      <p>To Vehicles</p>
+    </div>
+
+    {/* 🔹 Now only admins see this */}
+    <div className="card" onClick={() => handleNavigation('/updates')}>
+      <FaSyncAlt className="icon" />
+      <h3>Update Packages</h3>
+      <p>{updateCount}</p>
+    </div>
+  </>
+)}
       </div>
     </div>
   );

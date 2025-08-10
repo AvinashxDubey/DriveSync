@@ -55,11 +55,11 @@ const updateVehicle = async (req, res) => {
     const { vin } = req.params;
     const updates = req.body;
 
-    const updatedVehicle = await Vehicle.findOneAndUpdate(
-      { owner: req.user.id },
-      { $set: updates },
-      { new: true }
-    );
+   const updatedVehicle = await Vehicle.findOneAndUpdate(
+  { owner: req.user.id, vin }, // now checks VIN too
+  { $set: updates },
+  { new: true }
+);
 
     if (!updatedVehicle) {
       return res.status(404).json({ message: 'Vehicle not found.' });
