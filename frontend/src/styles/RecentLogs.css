@@ -61,3 +61,65 @@
     padding: 1rem 0.5rem 2rem 0.5rem;
   }
 }
+
+.update-vehicle-page {
+  background: white;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.update-vehicle-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #004080; /* blue shade */
+}
+
+.vehicle-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.vehicle-card {
+  background-color: #cce0ff; /* light blue card */
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 64, 128, 0.3);
+  padding: 15px;
+  width: 280px;
+}
+
+.vehicle-card h2 {
+  color: #003366;
+}
+
+.vehicle-card p {
+  margin: 8px 0;
+  color: #002244;
+}
+
+.update-btn {
+  background-color: #004080;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.update-btn:hover {
+  background-color: #00264d;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}
+
+.no-vehicles {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}

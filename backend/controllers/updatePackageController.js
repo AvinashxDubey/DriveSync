@@ -36,33 +36,51 @@ const getAllUpdates = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+const getVehiclesWithAssignedUpdates = async (req, res) => {
+  try {
+    const vehicles = await Vehicle.find({ assignedUpdate: { $exists: true, $ne: null } })
+      .populate('assignedUpdate', 'version description');
+    res.json(vehicles);
+  } catch (err) {
+    console.error('Error fetching vehicles with assigned updates:', err);
+    res.status(500).json({ message: 'Server error fetching vehicles with assigned updates', error: err.message });
+  }
+};
+
 
 // Assign an update to a vehicle
 const assignUpdateToVehicle = async (req, res) => {
   try {
-    const { id } = req.params; // vehicle ID
+    const { id } = req.params;
     const { updateId } = req.body;
 
-    const vehicle = await Vehicle.findById(id);
-    const update = await UpdatePackage.findById(updateId);
+    console.log('Assign update request:', { id, updateId });
 
-    if (!vehicle || !update) {
-      return res.status(404).json({ message: 'Vehicle or update not found.' });
-    }
+    const vehicle = await Vehicle.findById(id);
+    if (!vehicle) return res.status(404).json({ message: 'Vehicle not found.' });
+
+    const update = await UpdatePackage.findById(updateId);
+    if (!update) return res.status(404).json({ message: 'Update package not found.' });
 
     vehicle.assignedUpdate = update._id;
+
     await vehicle.save();
 
     res.json({ message: `Update ${update.version} assigned to vehicle ${vehicle.vin}` });
   } catch (err) {
+    console.error('Error in assignUpdateToVehicle:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
+
 const startUpdateForVehicle = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Starting update for vehicle id:', id);
+
     const vehicle = await Vehicle.findById(id).populate('assignedUpdate');
+    console.log('Vehicle found:', vehicle);
 
     if (!vehicle) return res.status(404).json({ message: 'Vehicle not found.' });
     if (!vehicle.assignedUpdate) {
@@ -74,6 +92,7 @@ const startUpdateForVehicle = async (req, res) => {
 
     vehicle.updateInProgress = true;
     await vehicle.save();
+    console.log('Vehicle updated to updateInProgress = true');
 
     const log = new UpdateLog({
       vehicle: vehicle._id,
@@ -82,11 +101,15 @@ const startUpdateForVehicle = async (req, res) => {
       progress: 0
     });
     await log.save();
+    console.log('Update log saved');
+
     res.json({ message: 'Update started', log });
   } catch (err) {
+    console.error('Error in startUpdateForVehicle:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
 
 const getUserAssignedUpdateCount = async (req, res) => {
   try {
@@ -122,4 +145,5 @@ module.exports = {
   startUpdateForVehicle,
   getUserAssignedUpdateCount,
   getAdminCreatedUpdateCount,
+   getVehiclesWithAssignedUpdates,
 };

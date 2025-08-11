@@ -9,6 +9,7 @@ import RegisterVehicles from './pages/RegisterVehicles';
 import Home from './pages/Home';
 import RecentLogs from './components/RecentLogs';
 import Register from './pages/Register';
+import UpdateVehicle from './pages/UpdateVehicle';
 
 // Authentication check
 const isAuthenticated = () => localStorage.getItem("token");
@@ -48,6 +49,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <UpdatePackage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/update-vehicle"
+          element={
+            <PrivateRoute>
+              <UpdateVehicle />
             </PrivateRoute>
           }
         />

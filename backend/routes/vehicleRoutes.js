@@ -17,4 +17,5 @@ router.put('/update/:vin', verifyToken, updateVehicle);
 router.delete('/delete/:vin', verifyToken, deleteVehicle);
 router.get('/count', verifyToken, getUserVehicleCount);
 
+
 module.exports = router;

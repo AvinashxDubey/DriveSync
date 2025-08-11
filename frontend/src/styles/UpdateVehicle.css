@@ -1,0 +1,87 @@
+.update-vehicle-page {
+  background-color: white;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.update-vehicle-title {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 20px;
+}
+
+.no-vehicles {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+
+.vehicle-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.vehicle-card {
+  background-color: #007bff;
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+}
+
+.vehicle-card h2 {
+  margin-bottom: 8px;
+}
+
+.vehicle-card p {
+  margin: 4px 0;
+}
+
+.update-btn {
+  margin-top: 10px;
+  background-color: white;
+  color: #007bff;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.update-btn:hover {
+  background-color: #e6e6e6;
+}
+.update-btn.in-progress {
+  background-color: green;
+  color: white;
+  cursor: not-allowed;
+}
+.progress-bar-wrapper {
+  width: 100%;
+  background-color: #eee;
+  height: 12px;
+  border-radius: 6px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7b2ff7, #f107a3);
+  border-radius: 6px 0 0 6px;
+  transition: width 0.5s ease;
+}
+
+.update-completed-text {
+  color: green;
+  font-weight: bold;
+  margin-top: 4px;
+}
+

@@ -1,10 +1,16 @@
 import axios from 'axios';
 
+// Set your backend base URL here or in your .env file as VITE_API_URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
+  baseURL: API_BASE_URL,
+  withCredentials: true, // if you need cookies/sessions
 });
 
+console.log("API Base URL:", API_BASE_URL);
+
+// Add Authorization header automatically if token exists
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -13,31 +19,31 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-// Auth APIs
+// --- Auth APIs ---
 export const signupUser = (userData) => API.post('/register', userData);
 export const loginUser = (credentials) => API.post('/login', credentials);
-export const getProfile = (token) => API.get('/profile', token);
+export const getProfile = () => API.get('/profile');
 
-// Contact Us API
-export const submitContactMessage = (contactData) => API.post('/contact-us', contactData);
-
-// Vehicle APIs
+// --- Vehicle APIs ---
 export const registerVehicle = (vehicleData) => API.post('/vehicle/register', vehicleData);
 export const getAllVehicles = () => API.get('/vehicle/vehicles');
 export const getVehicleByVin = (vin) => API.get(`/vehicle/getVehicle/${vin}`);
 export const updateVehicle = (vin, vehicleData) => API.put(`/vehicle/update/${vin}`, vehicleData);
 export const deleteVehicle = (vin) => API.delete(`/vehicle/delete/${vin}`);
 export const getUserVehicleCount = () => API.get('/vehicle/count');
+// --- Vehicle APIs ---
+export const getVehiclesWithAssignedUpdate = () => API.get('/vehicle/vehicles-assigned-update');
 
-// Update Package APIs
+
+// --- Update Package APIs ---
 export const createUpdatePackage = (packageData) => API.post('/update/addPackage', packageData);
 export const getAllUpdatePackages = () => API.get('/update/updates');
-export const assignUpdateToVehicle = (vehicleId, data) =>
-  API.post(`/update/vehicle/${vehicleId}`, data);
-export const getUserAssignedUpdateCount = () => API.get('/update/my-updates/count');
+
+export const assignUpdateToVehicle = (vehicleId, body) => {
+  return API.patch(`/update/vehicle/${vehicleId}`, body);
+};export const getUserAssignedUpdateCount = () => API.get('/update/my-updates/count');
 export const getAdminCreatedUpdateCount = () => API.get('/update/admin-updates/count');
 
-// Log APIs
+// --- Log APIs ---
 export const logUpdateStatus = (vin, statusData) => API.post(`/log/status/${vin}`, statusData);
 export const getLogsByVehicle = (vin) => API.get(`/log/logs/${vin}`);
-export const getUserUpdateLogCount = () => API.get('/log/count');

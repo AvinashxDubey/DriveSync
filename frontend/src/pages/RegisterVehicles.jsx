@@ -2,30 +2,25 @@ import React, { useState } from 'react';
 import '../styles/RegisterVehicles.css';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
-import { registerVehicle } from '../services/api';  // Ensure this API function exists
-
+import Navbar from '../components/Navbar';
 function RegisterVehicles() {
   const [vehicleData, setVehicleData] = useState({
     vin: '',
     model: '',
-    owner: '', // Assuming you want to pass owner as well (optional)
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Handle input changes
   const handleChange = (e) => {
     setVehicleData({ ...vehicleData, [e.target.name]: e.target.value });
   };
 
-  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
 
-    // Basic client validation
     if (!vehicleData.vin.trim() || !vehicleData.model.trim()) {
       setError('Please fill in both VIN and Model.');
       return;
@@ -33,20 +28,25 @@ function RegisterVehicles() {
 
     try {
       setLoading(true);
-      // Call backend API to register vehicle
-      await registerVehicle(vehicleData);
+     const res = await fetch('http://localhost:5000/api/vehicle/register',  {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  },
+  body: JSON.stringify(vehicleData),
+});
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to register vehicle.');
+      }
 
       setSuccessMsg('Vehicle registered successfully!');
-      // Optionally reset form
-      setVehicleData({ vin: '', model: '', owner: '' });
+      setVehicleData({ vin: '', model: '' });
     } catch (err) {
-      let msg = 'Failed to register vehicle.';
-      if (err.response?.data?.message) {
-        msg = err.response.data.message;
-      } else if (err.message) {
-        msg = err.message;
-      }
-      setError(msg);
+      setError(err.message || 'Failed to register vehicle.');
     } finally {
       setLoading(false);
     }
@@ -54,15 +54,14 @@ function RegisterVehicles() {
 
   return (
     <div className="wrapper">
+      <Navbar/>
       <main className="content">
         <div className="card registerVehicleCard">
           <h2>Register New Vehicle</h2>
 
           {loading && <Loader />}
           {error && <ErrorMessage message={error} />}
-          {successMsg && (
-            <div className="successMessage">{successMsg}</div>
-          )}
+          {successMsg && <div className="successMessage">{successMsg}</div>}
 
           <form onSubmit={handleSubmit} className="registerForm">
             <div className="formGroup">
@@ -90,19 +89,6 @@ function RegisterVehicles() {
                 required
               />
             </div>
-
-            {/* Optional: owner (if needed, can be omitted if backend sets automatically) */}
-            {/* <div className="formGroup">
-              <label htmlFor="owner">Owner ID</label>
-              <input
-                type="text"
-                id="owner"
-                name="owner"
-                value={vehicleData.owner}
-                onChange={handleChange}
-                placeholder="Enter owner ID"
-              />
-            </div> */}
 
             <button className="submitButton" type="submit" disabled={loading}>
               Register Vehicle

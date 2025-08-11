@@ -12,8 +12,9 @@ import { useEffect, useState } from 'react';
 import {
   getUserVehicleCount,
   getUserAssignedUpdateCount,
-  getUserUpdateLogCount
+  
 } from '../services/api';
+import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,13 +22,11 @@ const Dashboard = () => {
 
   const [vehicleCount, setVehicleCount] = useState(0);
   const [updateCount, setUpdateCount] = useState(0);
-  const [logCount, setLogCount] = useState(0);
 
   useEffect(() => {
     if (user?.role !== 'admin') {
       getUserVehicleCount().then((res) => setVehicleCount(res.data.count)).catch(() => {});
       getUserAssignedUpdateCount().then((res) => setUpdateCount(res.data.count)).catch(() => {});
-      getUserUpdateLogCount().then((res) => setLogCount(res.data.count)).catch(() => {});
     }
   }, [user]);
 
@@ -42,6 +41,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
+      <Navbar/>
       {/* 🔒 Logout button on top-right */}
       <div className="dashboard-header">
         <h2>{user?.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}</h2>
@@ -62,13 +62,17 @@ const Dashboard = () => {
               <h3>Register Vehicle</h3>
               <p>New</p>
             </div>
+            <div className="card" onClick={() => handleNavigation('/update-vehicle')}>
+              <FaPlusCircle className="icon" />
+              <h3>Update Vehicle</h3>
+              <p>New</p>
+            </div>
 
            
 
             <div className="card" onClick={() => handleNavigation('/logs')}>
               <FaFileAlt className="icon" />
               <h3>Recent Logs</h3>
-              <p>{logCount}</p>
             </div>
           </>
         )}
