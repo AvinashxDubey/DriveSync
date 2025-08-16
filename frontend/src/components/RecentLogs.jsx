@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
 import '../styles/UpdateVehicle.css';
+import { getVehiclesWithAssignedUpdate, getLogsByVehicleId } from '../services/api';
 
 const RecentLogsPage = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -20,13 +20,10 @@ const RecentLogsPage = () => {
       setLoadingVehicles(true);
       setErrorVehicles('');
       try {
-        const res = await axios.get('http://localhost:5000/api/update/vehicles-assigned-update', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
+        const res = await getVehiclesWithAssignedUpdate();
         setVehicles(res.data);
       } catch (err) {
+        console.error('Error fetching vehicles:', err);
         setErrorVehicles('Failed to load vehicles');
       } finally {
         setLoadingVehicles(false);
@@ -38,18 +35,18 @@ const RecentLogsPage = () => {
 
   // Fetch logs for a single vehicle on demand
   const fetchLogsForVehicle = async (vehicleId) => {
-    setLoadingLogs(prev => ({ ...prev, [vehicleId]: true }));
+    setLoadingLogs((prev) => ({ ...prev, [vehicleId]: true }));
     try {
-      const res = await axios.get(`http://localhost:5000/api/log/vehicle/${vehicleId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      setLogsByVehicle(prev => ({ ...prev, [vehicleId]: res.data }));
+      const res = await getLogsByVehicleId(vehicleId); // ✅ using API helper
+      setLogsByVehicle((prev) => ({ ...prev, [vehicleId]: res.data }));
     } catch (err) {
-      setLogsByVehicle(prev => ({ ...prev, [vehicleId]: [{ message: 'Failed to load logs' }] }));
+      console.error(`Error fetching logs for vehicle ${vehicleId}:`, err);
+      setLogsByVehicle((prev) => ({
+        ...prev,
+        [vehicleId]: [{ message: 'Failed to load logs' }],
+      }));
     } finally {
-      setLoadingLogs(prev => ({ ...prev, [vehicleId]: false }));
+      setLoadingLogs((prev) => ({ ...prev, [vehicleId]: false }));
     }
   };
 
@@ -68,7 +65,9 @@ const RecentLogsPage = () => {
   return (
     <div className="update-vehicle-page">
       <Navbar />
-      <h1 className="update-vehicle-title">Vehicles Assigned Updates & Recent Logs</h1>
+      <h1 className="update-vehicle-title">
+        Vehicles Assigned Updates & Recent Logs
+      </h1>
 
       {loadingVehicles && <p>Loading vehicles...</p>}
       {errorVehicles && <p className="error-message">{errorVehicles}</p>}
@@ -78,7 +77,7 @@ const RecentLogsPage = () => {
       )}
 
       <div className="vehicle-list">
-        {vehicles.map(vehicle => {
+        {vehicles.map((vehicle) => {
           const logs = logsByVehicle[vehicle._id] || [];
           const isExpanded = expandedVehicleId === vehicle._id;
 
@@ -96,7 +95,9 @@ const RecentLogsPage = () => {
                 {latestLog ? latestLog.status || 'No status' : 'No logs'}
               </p>
               {latestLog && latestLog.message && (
-                <p><em>{latestLog.message}</em></p>
+                <p>
+                  <em>{latestLog.message}</em>
+                </p>
               )}
 
               <button
@@ -114,12 +115,14 @@ const RecentLogsPage = () => {
                     <p>No logs found.</p>
                   ) : (
                     <ul>
-                      {logs.map(log => (
-                        <li key={log._id}>
+                      {logs.map((log) => (
+                        <li key={log._id || Math.random()}>
                           <strong>Status:</strong> {log.status} |{' '}
                           <strong>Progress:</strong> {log.progress}% |{' '}
                           <em>{log.message}</em> |{' '}
-                          <small>{new Date(log.createdAt).toLocaleString()}</small>
+                          <small>
+                            {new Date(log.createdAt).toLocaleString()}
+                          </small>
                         </li>
                       ))}
                     </ul>

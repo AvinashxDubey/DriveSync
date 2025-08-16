@@ -3,6 +3,10 @@ import '../styles/RegisterVehicles.css';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import Navbar from '../components/Navbar';
+
+// import API function
+import { registerVehicle } from '../services/api';
+
 function RegisterVehicles() {
   const [vehicleData, setVehicleData] = useState({
     vin: '',
@@ -28,25 +32,14 @@ function RegisterVehicles() {
 
     try {
       setLoading(true);
-     const res = await fetch('http://localhost:5000/api/vehicle/register',  {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-  },
-  body: JSON.stringify(vehicleData),
-});
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to register vehicle.');
-      }
+      // call API function instead of fetch
+      await registerVehicle(vehicleData);
 
       setSuccessMsg('Vehicle registered successfully!');
       setVehicleData({ vin: '', model: '' });
     } catch (err) {
-      setError(err.message || 'Failed to register vehicle.');
+      setError(err.response?.data?.message || err.message || 'Failed to register vehicle.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +47,7 @@ function RegisterVehicles() {
 
   return (
     <div className="wrapper">
-      <Navbar/>
+      <Navbar />
       <main className="content">
         <div className="card registerVehicleCard">
           <h2>Register New Vehicle</h2>

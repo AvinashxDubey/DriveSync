@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import '../styles/UpdatePackage.css';
 import Navbar from './Navbar';
+import { createUpdatePackage } from '../services/api';
 
 function CreateUpdatePackage() {
   const [version, setVersion] = useState('');
@@ -17,13 +17,6 @@ function CreateUpdatePackage() {
     setErrorMsg('');
     setSuccessMsg('');
 
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setErrorMsg('❌ You must be logged in as an admin.');
-      setLoading(false);
-      return;
-    }
-
     // Convert comma-separated text into an array
     const filesArray = files
       .split(',')
@@ -31,11 +24,11 @@ function CreateUpdatePackage() {
       .filter(f => f !== '');
 
     try {
-      const res = await axios.post(
-        'http://localhost:5000/api/update/addPackage',
-        { version, description, files: filesArray },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await createUpdatePackage({
+        version,
+        description,
+        files: filesArray,
+      });
 
       setSuccessMsg(res.data.message || '✅ Package created!');
       setVersion('');
@@ -57,7 +50,7 @@ function CreateUpdatePackage() {
 
   return (
     <div className="wrapper">
-      <Navbar/>
+      <Navbar />
       <main className="content">
         <h2>Create Update Package</h2>
 

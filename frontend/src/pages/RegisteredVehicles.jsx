@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import '../styles/RegisteredVehicles.css';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
+import { getAllVehicles } from '../services/api';
 
 function RegisteredVehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -15,17 +15,7 @@ function RegisteredVehicles() {
       setLoading(true);
       setError('');
       try {
-        const token = localStorage.getItem('token'); // assuming you store token here
-
-        if (!token) {
-          throw new Error('User not authenticated. Please log in.');
-        }
-
-        const response = await axios.get('http://localhost:5000/api/vehicle/vehicles-user', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const response = await getAllVehicles();
 
         if (!response || typeof response !== 'object') {
           throw new Error('Invalid response from server.');
@@ -58,7 +48,7 @@ function RegisteredVehicles() {
 
   return (
     <div className="vehicles-wrapper">
-      <Navbar/>
+      <Navbar />
       <main className="vehicles-content">
         <h2>Registered Vehicles</h2>
 

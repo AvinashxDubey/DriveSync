@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  getAllVehicles, 
-  getAllUpdatePackages, 
-  assignUpdateToVehicle 
-} from '../services/api';
+import { getAllVehicles, getAllUpdatePackages, assignUpdateToVehicle } from '../services/api';
 import Navbar from '../components/Navbar';
 
 export default function AssignUpdate() {
@@ -11,7 +7,6 @@ export default function AssignUpdate() {
   const [updates, setUpdates] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState('');
   const [selectedUpdateId, setSelectedUpdateId] = useState('');
-  const [manualUpdateId, setManualUpdateId] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -30,7 +25,6 @@ export default function AssignUpdate() {
       });
   }, []);
 
-  // Helper to check valid MongoDB ObjectId format
   const isValidObjectId = (id) => /^[a-fA-F0-9]{24}$/.test(id);
 
   const handleSubmit = async (e) => {
@@ -42,47 +36,38 @@ export default function AssignUpdate() {
       return;
     }
 
-    // Prefer manualUpdateId if provided, otherwise use selectedUpdateId from dropdown
-    const updateIdToAssign = manualUpdateId.trim() || selectedUpdateId;
-
-    if (!updateIdToAssign) {
-      setMessage('⚠️ Please select or enter an update ID.');
+    if (!selectedUpdateId) {
+      setMessage('⚠️ Please select an update package.');
       return;
     }
 
-    if (!isValidObjectId(updateIdToAssign)) {
-      setMessage('⚠️ Invalid Update ID format. Must be 24 hex characters.');
+    if (!isValidObjectId(selectedUpdateId)) {
+      setMessage('⚠️ Invalid Update ID format.');
       return;
     }
-
-    console.log('Assigning update:', updateIdToAssign, 'to vehicle:', selectedVehicleId);
 
     try {
-      const res = await assignUpdateToVehicle(selectedVehicleId, { updateId: updateIdToAssign });
+      const res = await assignUpdateToVehicle(selectedVehicleId, { updateId: selectedUpdateId });
       setMessage(res.data?.message || '✅ Update successfully assigned!');
       setSelectedVehicleId('');
       setSelectedUpdateId('');
-      setManualUpdateId('');
     } catch (err) {
       console.error('Error assigning update:', err);
-      // Show detailed message from backend or generic error
       setMessage(err?.response?.data?.message || '❌ Failed to assign update.');
     }
   };
 
   return (
-  
     <div style={{ padding: '20px' }}>
-        <Navbar/>
+      <Navbar />
       <h2>Assign Update to Vehicle</h2>
 
       <form onSubmit={handleSubmit}>
-        {/* Vehicle Dropdown */}
         <div style={{ marginBottom: '10px' }}>
           <label><strong>Vehicle:</strong></label><br />
           <select 
             value={selectedVehicleId} 
-            onChange={e => setSelectedVehicleId(e.target.value)}
+            onChange={e => setSelectedVehicleId(e.target.value)} 
             required
           >
             <option value="">-- Select vehicle --</option>
@@ -94,14 +79,14 @@ export default function AssignUpdate() {
           </select>
         </div>
 
-        {/* Update Package Dropdown */}
         <div style={{ marginBottom: '10px' }}>
-          <label><strong>Update Package (select from list):</strong></label><br />
+          <label><strong>Update Package:</strong></label><br />
           <select 
             value={selectedUpdateId} 
-            onChange={e => setSelectedUpdateId(e.target.value)}
+            onChange={e => setSelectedUpdateId(e.target.value)} 
+            required
           >
-            <option value="">-- Select update --</option>
+            <option value="">-- Select update package --</option>
             {updates.map(update => (
               <option key={update._id} value={update._id}>
                 {update.version} - {update.description}
@@ -110,24 +95,11 @@ export default function AssignUpdate() {
           </select>
         </div>
 
-        {/* Or manual Update ID input */}
-        <div style={{ marginBottom: '10px' }}>
-          <label><strong>Or enter Update ID manually:</strong></label><br />
-          <input 
-            type="text" 
-            value={manualUpdateId} 
-            onChange={e => setManualUpdateId(e.target.value)} 
-            placeholder="Enter updateId here" 
-          />
-        </div>
-
-        {/* Submit Button */}
         <div style={{ marginBottom: '10px' }}>
           <button type="submit">Assign Update</button>
         </div>
-      </form>   
+      </form>
 
-      {/* Status Message */}
       {message && <p>{message}</p>}
     </div>
   );

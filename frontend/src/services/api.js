@@ -25,6 +25,12 @@ export const loginUser = (credentials) => API.post('/login', credentials);
 export const getProfile = () => API.get('/profile');
 
 // --- Vehicle APIs ---
+// --- Update Start APIs ---
+export const startVehicleUpdate = (vehicleId) => {
+  return API.patch(`/update/start-update/vehicle/${vehicleId}`);
+};
+
+
 export const registerVehicle = (vehicleData) => API.post('/vehicle/register', vehicleData);
 export const getAllVehicles = () => API.get('/vehicle/vehicles');
 export const getVehicleByVin = (vin) => API.get(`/vehicle/getVehicle/${vin}`);
@@ -32,8 +38,9 @@ export const updateVehicle = (vin, vehicleData) => API.put(`/vehicle/update/${vi
 export const deleteVehicle = (vin) => API.delete(`/vehicle/delete/${vin}`);
 export const getUserVehicleCount = () => API.get('/vehicle/count');
 // --- Vehicle APIs ---
-export const getVehiclesWithAssignedUpdate = () => API.get('/vehicle/vehicles-assigned-update');
-
+export const getVehiclesWithAssignedUpdate = () => {
+  return API.get('/update/vehicles-assigned-update');
+};
 
 // --- Update Package APIs ---
 export const createUpdatePackage = (packageData) => API.post('/update/addPackage', packageData);
@@ -45,5 +52,9 @@ export const assignUpdateToVehicle = (vehicleId, body) => {
 export const getAdminCreatedUpdateCount = () => API.get('/update/admin-updates/count');
 
 // --- Log APIs ---
-export const logUpdateStatus = (vin, statusData) => API.post(`/log/status/${vin}`, statusData);
+
+export const logUpdateStatus = (vehicleId, statusData) => {
+  return API.patch(`/log/status/vehicle/${vehicleId}`, statusData);
+};
 export const getLogsByVehicle = (vin) => API.get(`/log/logs/${vin}`);
+export const getLogsByVehicleId = (vehicleId) => API.get(`/log/vehicle/${vehicleId}`);
